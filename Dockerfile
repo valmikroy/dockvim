@@ -14,3 +14,4 @@ RUN curl -O https://dl.google.com/go/go1.13.7.linux-amd64.tar.gz && \
          chown -R root:root ./go && \
          mv go /usr/local
 RUN apt-get install -y exuberant-ctags
+ENTRYPOINT ["/usr/bin/nvim"]
