@@ -1,17 +1,27 @@
-FROM ubuntu:latest
-RUN apt-get update && \
-        apt-get install -y python3.8 python3.8-dev python3.8-minimal python3.8-venv python3-pip curl apt-utils
-RUN curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage && \
-        chmod +x nvim.appimage && mv nvim.appimage  /usr/bin/nvim 
-RUN update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60 && \
-    update-alternatives --config vi && \
-    update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60 && \
-    update-alternatives --config vim && \
-    update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60 && \
-    update-alternatives --config editor
-RUN curl -O https://dl.google.com/go/go1.13.7.linux-amd64.tar.gz && \
-        tar -xvf go1.13.7.linux-amd64.tar.gz && \
-         chown -R root:root ./go && \
-         mv go /usr/local
-RUN apt-get install -y exuberant-ctags
-ENTRYPOINT ["/usr/bin/nvim"]
+FROM ubuntu:focal-20200423
+
+RUN export DEBIAN_FRONTEND="noninteractive" \
+        && apt-get update -y \
+        && apt-get install -y curl git ncurses-dev exuberant-ctags \
+        && apt-get install -y ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
+
+
+WORKDIR /build
+RUN export CMAKE_BUILD_TYPE=Release \
+        && export CMAKE_INSTALL_PREFIX=/usr/local \
+        && git clone https://github.com/neovim/neovim.git \
+        && cd neovim && git checkout stable \
+        && make && make  install
+
+
+
+WORKDIR /tmp
+COPY entrypoint.sh /usr/local/bin/
+#RUN time vim -c "execute 'silent GoUpdateBinaries' | execute 'quit'"
+
+
+ENV WORKSPACE="/mnt/workspace"
+VOLUME "${WORKSPACE}"
+
+RUN /usr/local/bin/nvim -c "execute 'quit'"
+ENTRYPOINT ["sh", "/usr/local/bin/entrypoint.sh"]
