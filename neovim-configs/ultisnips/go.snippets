@@ -1,0 +1,239 @@
+snippet _v "quick variable"
+${1} := ${2}
+endsnippet
+
+snippet _vv "define variable"
+var ${1:a} ${2:type} = ${3:value}
+endsnippet
+
+snippet _vvv "define variable list"
+var (
+	${1:a} ${2:type} = ${3:value}
+)
+endsnippet
+
+snippet _vl "quick extend the list var"
+${1:a} ${2:type} = ${3:value}
+endsnippet
+
+snippet _p  "package name"
+package ${1:main}
+endsnippet
+
+snippet _im "import"
+import (
+	${1:"fmt"}
+	${2:"io"}
+)	
+endsnippet
+
+snippet _fun  "function"
+func ${1:funcName}(${2}) ${3:error} {
+	${4}
+}
+${0}		
+endsnippet
+
+snippet _meth  "method"
+func (${1:receiver} ${2:type}) ${3:funcName}(${4}) ${5:error} {
+	${6}
+}
+${0}
+endsnippet
+
+snippet _if "single if statement"
+if ${1:/* condition */} {
+	${2:${VISUAL}}
+}
+endsnippet
+
+snippet _ife "if else condition"
+if ${1:/* condition */} {
+	${2:${VISUAL}}
+} else {
+	${0}
+}
+endsnippet
+
+snippet _el  "else"
+else {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet _ir  "error if condition"
+if err != nil {
+	return err
+}
+${0}
+endsnippet
+
+snippet _irr  "error if condition with function"
+if err := ${1:myfunc()}; err != nil {
+	return err
+}
+${0}
+endsnippet
+
+snippet _forr  "for loop with range"
+for ${1:e} := range ${2:collection} {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet _fori  "for loop with a counter"
+for ${2:i} := 0; $2 < ${1:count}; $2${3:++} {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet _sw "switch"
+switch ${1:var} {
+case ${2:value1}:
+	${3}
+case ${4:value2}:
+	${5}
+default:
+	${0}
+}
+endsnippet
+
+snippet _ts "define structure"
+type ${1:name} struct {
+	${2:attrName} ${3:attrType}
+}
+endsnippet	
+
+snippet _pl  "println"
+fmt.Println(${1})
+endsnippet
+
+snippet _fmte "fmt errorf"
+fmt.Errorf("${1} , %v",err)
+endsnippet
+
+
+
+
+
+
+snippet _cb_filereadbyline "CB open and read file by line"
+
+//import (
+//	"bufio"
+//	"fmt"
+//	"io"
+//	"os"
+//)
+
+// openFile(logfile)
+func readFileLineByLine(file string) error {
+	fd, err := os.OpenFile(file, os.O_RDONLY, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	defer fd.Close()
+
+	rd := bufio.NewReader(fd)
+	for {
+		if line, err := rd.ReadString('\n'); err != nil {
+			if err == io.EOF {
+				// add sleep here instead of break if you want to execute functionality 
+				break
+			}
+		} else {
+			//fmt.Printf(">> %s", line)
+			${1://do something here with eadh line}
+		}
+	}
+	return nil
+}
+
+endsnippet
+
+
+
+snippet  _cb_dirwalk "Directory walk"
+
+//import (
+//	"fmt"
+//	"io/ioutil"
+//	"log"
+//)
+//
+func DirWalk(dir string) error {
+
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return err
+	}
+
+	for _, f := range files {
+
+		var path string
+
+		if dir == "/" {
+			path = dir + f.Name()
+		} else {
+			path = dir + "/" + f.Name()
+		}
+
+		if f.IsDir() {
+			Walk(path)
+		}
+
+		${1://Do something here with each file}
+		fmt.Println(path)
+	}
+
+	return nil
+}
+
+//func main() {
+//
+//	err := DirWalk("/")
+//	if err != nil {
+//		log.Fatalln(err)
+//	}
+//
+//}
+//
+endsnippet
+
+snippet _cb_splitMultiLine "Various type of string splits"
+
+// Split multiline 
+for index, line := range string.Split(multiline, "\n") {
+	fmt.Println(line)
+}
+
+var multiline string =`
+blha 
+blah
+`
+endsnippet
+
+
+snippet _cb_regexStringSplit "Regex based string split"
+//import (
+//	"regxp"
+//)
+//
+func regSplit(s string, dlim string) []string {
+	re := regexp.MustCompile(dlim)
+	slice := []string{}
+
+	for _, ss := range re.Split(s, -1) {
+		slice = append(slice, ss)
+	}
+	return slice
+}
+endsnippet
+
+snippet _formap "Map loop"
+
+for k, v := range data {
+	//fmt.Printf("%s\t%s\n", k, v)
+}
+
+endsnippet
