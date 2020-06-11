@@ -48,7 +48,8 @@ Plug 'honza/vim-snippets'
 Plug 'metakirby5/codi.vim'
 Plug 'dkarter/bullets.vim'
 
-
+" Ruby
+Plug 'vim-ruby/vim-ruby'
 
 " Entertainment
 "Plug 'ryanss/vim-hackernews'

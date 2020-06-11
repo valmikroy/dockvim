@@ -1,0 +1,58 @@
+snippet _cb_spec_describe "simple rspec describe block"
+describe "blah" do 
+	it 'some true condition' do
+		expect(true).to match(true)	
+	end
+end
+endsnippet
+
+
+snippet _cb_init "initialize"
+#!/usr/bin/env ruby
+
+require 'pp'
+
+x=3
+
+pp x
+endsnippet
+
+
+snippet _cb_input "take input"
+input = gets.chomp
+# put input
+endsnippet
+
+snippet  _if "If loop"
+if ${1:a} == ${2:b}
+
+elsif ${3:c%4} == 0
+
+else
+
+end
+endsnippet
+
+
+snippet _doblk "Do block"
+	do |${1}|
+
+
+end	
+endsnippet 
+
+snippet _cb_readfile "Read file line by line"
+File.readlines('${1:filename}').each do |line|
+	puts line
+end
+endsnippet
+
+
+snippet _func "Function"
+def ${1:blah}(${2})
+
+end
+endsnippet
+
+
+
