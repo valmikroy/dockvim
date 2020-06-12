@@ -34,7 +34,7 @@ end
 endsnippet
 
 
-snippet _doblk "Do block"
+snippet _do "Do block"
 	do |${1}|
 
 
@@ -54,5 +54,34 @@ def ${1:blah}(${2})
 end
 endsnippet
 
+snippet _cb_recursivehash "Recursive hash"
+class RecursiveHash < Hash
+def initialize
+	recurse_hash = proc { |h, k| h[k] = Hash.new(&recurse_hash) }
+		super(&recurse_hash)
+	end
+end
+endsnippet
+
+
+snippet _r_named_var "regex named variable"
+r = %r{
+\$
+(?<dollars>\d+)
+\.
+(?<cents>\d+)
+}x
+
+pp r.match("$10.40")
+endsnippet
+
+snippet _r_backtrack "regex backtracking"
+# positive lookahead
+r = %r{
+(\d)
+(?=(\d{3})+$)
+}x
+pp "10000000000".gsub(r,'\1,')
+endsnippet 
 
 
