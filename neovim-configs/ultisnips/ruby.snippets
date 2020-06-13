@@ -151,3 +151,82 @@ ensure
 end	
 
 endsnippet 
+
+snippet _case "Case statement"
+
+capacity = 50
+
+case capacity
+when 0
+  pp "You ran out of gas."
+when 1..20
+  pp "The tank is almost empty. Quickly, find a gas station!"
+when 21..70
+  pp "You should be ok for now."
+when 71..100
+  pp "The tank is almost full."
+else
+  raise "Error: capacity has an invalid value (#{capacity})"
+end
+
+endsnippet
+
+
+snippet _cb_blocks "various blocks"
+
+## Yield block with an argument
+def one_two_three
+  yield 1
+  yield 2
+  yield 3
+end
+
+one_two_three { |number| puts number * 10 }
+# 10, 20, 30
+
+## Check for code block before calling yield
+def do_something_with_block
+  return "No block given" unless block_given?
+  yield
+end
+
+## Explicit call for code block 
+def explicit_block(&block)
+  block.call # same as yield
+end
+
+explicit_block { puts "Explicit block called" }
+
+## Lambda with an argument
+times_two = ->(x) { x * 2 }
+puts times_two.call(10)
+
+## Lambda complains about wrong number of arguments
+begin
+puts times_two.call
+rescue => e
+  puts e.message
+end
+
+## Proc which does not care about arguments
+t = Proc.new { |x,y| puts "Proc don't care about arguments!" }
+t.call
+
+
+# return value of Lambda vs Proc
+# Should work
+my_lambda = -> { return 1 }
+puts "Lambda result: #{my_lambda.call}"
+# Should raise exception
+begin 
+my_proc = Proc.new { puts "I am executing proc, but it will not see return value"; return 1 }
+puts "Proc result: #{my_proc.call}"
+rescue => e
+  puts e.message 
+end
+
+# how procs and lambdas are different:
+# Procs return from the current method, while lambdas return from the lambda itself.
+# Procs don’t care about the correct number of arguments, while lambdas will raise an exception.
+
+endsnippet
