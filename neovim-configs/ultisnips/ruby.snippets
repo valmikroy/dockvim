@@ -1,9 +1,30 @@
 snippet _cb_spec_describe "simple rspec describe block"
-describe "blah" do 
-	it 'some true condition' do
-		expect(true).to match(true)	
-	end
+
+require 'rspec'
+
+def example_function(input)
+  if input > 5
+    input   -= 1
+  elsif input < 5
+    input   += 1  
+  end
+  return input
 end
+
+
+# Run with  rspec spec --format documentation
+describe "Test example function" do 
+  it 'decrement' do
+    expect(example_function(6)).to match(5)	
+  end
+  it 'increment' do
+    expect(example_function(3)).to match(4)	
+  end
+  it 'error' do
+    expect(example_function(5)).to match(5)	
+  end
+end
+
 endsnippet
 
 
@@ -169,6 +190,19 @@ else
   raise "Error: capacity has an invalid value (#{capacity})"
 end
 
+endsnippet
+
+
+snippet _match_sub "Match regex on the string" 
+# m[:type] => 3
+m = /(?<type>\d)\d\d/.match('300')
+
+# 303 => 3XX
+p '303'.gsub(/^(\d)\d\d/,'\1XX')
+endsnippet
+
+snippet _++ "Increment by 1" 
+  += 1
 endsnippet
 
 
