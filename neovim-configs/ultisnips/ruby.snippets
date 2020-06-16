@@ -264,3 +264,92 @@ end
 # Procs don’t care about the correct number of arguments, while lambdas will raise an exception.
 
 endsnippet
+
+
+snippet _cb_fork "Fork block" 
+
+# fork retry loop
+begin 
+
+retry_cnt ||=  0
+
+# fork block
+pid = Process.fork do
+  puts "From a child "  + $$.to_s
+  #exit -13
+end  
+
+# process status collection
+Process.waitpid(pid)
+status  = Process.last_status.exitstatus
+
+pp status
+puts $$
+retry_cnt += 1
+pp retry_cnt
+sleep 5
+
+end while retry_cnt < 3  && status != 0 
+endsnippet
+
+
+snippet _cb_threadpool "Threadpool" 
+
+require 'threads'
+class ThreadPool
+  def initialize(size)
+    @size = size
+    @jobs = Queue.new
+
+    @pool = Array.new(@size) do |i|
+      Thread.new do
+        Thread.abort_on_exception = true
+        Thread.current[:id] = i
+
+        catch(:exit) do
+          loop do
+            job = @jobs.pop
+            job.call
+          end
+        end
+      end
+    end
+
+    if block_given?
+      yield self
+      shutdown
+    end
+  end
+
+  def schedule(&block)
+    @jobs << block
+  end
+
+  def shutdown
+    @size.times do
+      schedule { throw :exit }
+    end
+    @pool.map(&:join)
+    true
+  end
+end
+
+
+
+ThreadPool.new(10) do |pool|
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+  pool.schedule { puts rand(100); sleep 1 }
+end  
+endsnippet
